@@ -8,13 +8,14 @@ protocol PinterestLayoutDelegate: AnyObject {
 class PinterestLayout: UICollectionViewLayout {
     weak var delegate: PinterestLayoutDelegate?
     
-    private let numberOfColumns = 3
-    private let cellPadding: CGFloat = 10
-    
+    private let numberOfColumns = 3 // 몇 개의 열로 정렬할 것인가.
+    private let cellPadding: CGFloat = 10 // 셀 간의 패딩
     private var cache: [UICollectionViewLayoutAttributes] = []
     
-    private var contentHeight: CGFloat = 0
+    private var reloadedCount = 0
+    var cellWidth: CGFloat = 0
     
+    private var contentHeight: CGFloat = 0
     private var contentWidth: CGFloat {
         guard let collectionView = collectionView else {
             return 0
@@ -23,13 +24,10 @@ class PinterestLayout: UICollectionViewLayout {
         return collectionView.bounds.width - (insets.left + insets.right)
     }
     
+    
     override var collectionViewContentSize: CGSize {
         return CGSize(width: contentWidth, height: contentHeight)
     }
-    
-    private var reloadedCount = 0
-    
-    var cellWidth: CGFloat = 0
     
     override func prepare() {
         guard let collectionView = collectionView else { return }
