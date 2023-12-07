@@ -1,37 +1,41 @@
 import UIKit
 
 class FirstViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private let secondVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "SecondViewController") as? SecondViewController
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        print("First VC init] textLabel is nil? \(secondVC?.textLabel == nil)")
     }
-
+    
     @IBAction func tappedButton(_ sender: Any) {
-        if let vc =  UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "SecondViewController") as? SecondViewController {
-            
-            vc.textLabel.text = "이건 에러가 나야 정상"
-            
-//            vc.text = "이제 될 꺼임"
-            
-//            vc.completeHandler = {
-//                vc.textLabel.text = "이제 될꺼임"
-//            }
-            
-            navigationController?.pushViewController(vc, animated: true)
-        }
+        guard let secondVC else { return }
+        secondVC.text = "이제 될 꺼임"
+        print("tappedButton] textLabel is nil? \(secondVC.textLabel == nil)")
+        navigationController?.pushViewController(secondVC, animated: true)
     }
 }
 
 
+
 class SecondViewController: UIViewController {
     @IBOutlet weak var textLabel: UILabel!
-//    var completeHandler: (() -> Void)?
-//    var text: String
+    var text: String?
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        
+        print("Second VC init] textLabel is nil? \(textLabel == nil)")
+    }
+    
+    override func loadView() {
+        print("SecondVC loadView-super.loadView() before] textLabel is nil? \(textLabel == nil)")
+        super.loadView()
+        print("SecondVC loadView-super.loadView() after] textLabel is nil? \(textLabel == nil)")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        completeHandler?()
-//        textLabel.text = text
+        textLabel.text = text
     }
 }
