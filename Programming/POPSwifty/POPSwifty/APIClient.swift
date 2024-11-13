@@ -14,14 +14,13 @@ enum MarvelError: Error{
 protocol APIResponse {}
 
 protocol APIRequest: Encodable {
+  associatedtype Response: Decodable
+  
 	var resourceName: String { get }
 }
 
 protocol APIClient {
-	func send(_ request: APIRequest,
-			  completion: @escaping (APIResponse?, Error?) -> Void)
-	
-	func send(_ request: APIRequest) async throws-> APIResponse?
+  func send<T: APIRequest>(_ request: T) async throws-> T.Response?
 }
 
 struct GetCharacters: APIRequest {
